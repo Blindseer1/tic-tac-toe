@@ -1,0 +1,29 @@
+
+body
+{
+    height: 100%;
+    margin: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+html{
+    height: 100%;
+    border: 0;
+}
+
+
+.square
+{
+    border:1px solid black;
+    
+    box-sizing: border-box;
+}
+.board
+{
+    height: 180px;
+    width: 180px;
+    display: grid;
+    grid-template-columns: repeat(3,60px);
+    grid-template-rows: repeat(3,60px);
+}
