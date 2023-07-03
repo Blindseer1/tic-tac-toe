@@ -1,5 +1,11 @@
+let result=document.querySelector('.result');
+let htmlBoard=document.querySelector('.board');
+
+let gameSquares=[];
+
+
 let gameBoard=(()=>{
-    let gameSquares=['X','0', 'X','0', 'X','0', 'X','0', ];
+   
     const boardCreate=(parent)=>{
         for(let i=0;i<9;i++)
         {
@@ -11,81 +17,179 @@ let gameBoard=(()=>{
        
     }
  
- 
-
-    return  { boardCreate,gameSquares };
+    return  { boardCreate };
 })();
-let htmlBoard=document.querySelector('.board');
+
+
+function markerArray(i)
+{
+    gameSquares[i]=GameFlow.getActivePlayer().getMarker();
+}
+
+
+
 
 gameBoard.boardCreate(htmlBoard);
 console.log(document.querySelectorAll('.square'))
 
 
-
-
-let game=true;
-
-const GameFlow=(()=>
-{
-    
-const Player=(playerName,playerMarker)=>
+const Player=(playerName,playerMarker,number)=>
 {
     let getMarker=()=>playerMarker;
     const getName=()=>playerName;
-    return {getMarker,getName};
+    const getNumber=()=>number;
+    return {getMarker,getName,getNumber};
 };
 
-let player1=Player('firstPlayer','X' );
-let player2=Player('secondPlayer','0' );
+let player1=Player('firstPlayer','X' ,'1');
+let player2=Player('secondPlayer','0' ,'2');
 
-let activePlayer=player1;
-let round=0;
-document.querySelectorAll('.square').forEach(cell=>cell.addEventListener('click',
-function eventHandler()
+
+
+const GameFlow=(()=>
 {
-   console.log(gameBoard.gameSquares) 
-   console.log(cell.dataset.index)
-  
-   
-    if(cell.innerHTML==""&& activePlayer==player1)
-    {
-        cell.innerHTML=player1.getMarker();
-        gameBoard.gameSquares[cell.dataset.index]=player1.getMarker();
-        console.log('p1 turn');
-        activePlayer=player2;
-        round++
-        console.log(round)
-    }
-    else if(cell.innerHTML==""&& activePlayer==player2)
-    {
-        cell.innerHTML=player2.getMarker();
-        gameBoard.gameSquares[cell.dataset.index]=player2.getMarker();
-        activePlayer=player1;
-        console.log('p2 turn')
-        round++
-        console.log(round)
+    let game=false;
+    let roundCount=0;
+    let round;
+    let winner;
 
-    }
-   
-   
+let activePlayer;
 
-}))
+let getGameState=()=>game;
 
-
-
-const playRound=()=>
+const gameOver=()=>
 {
-    let activePlayer=player1;
-    if(activePlayer==player1)
+    game=false;
+    winner=getActivePlayer().getName()
+    roundCount++
+    result.innerHTML=`Player ${winner} won this round`;
+    gameSquares=[];
+    document.querySelectorAll('.square').forEach(item=>item.innerHTML="")
+    if(roundCount==3)
     {
-        gameBoard.gameSquares.push(player1.getMarker());
-        console.log(player1.getMarker())
+        result.innerHTML=`Player ${winner} won this set`;
     }
+}
 
+
+
+//start a new round
+const playRound=()=>{
+    game=true;
+    round=0;
+    activePlayer=player1;  
+   
     
+    console.log(gameSquares)
    
 }
-return{playRound}
+
+const checkWin=()=>
+{
+    if(gameSquares[0]!=undefined 
+        && 
+        gameSquares[4]==gameSquares[8]
+        &&
+        gameSquares[4]==gameSquares[0])
+    {
+        gameOver()
+       
+    }else  if(gameSquares[2]!=undefined && gameSquares[4]==gameSquares[6] &&gameSquares[6]==gameSquares[2])
+    {
+        gameOver()
+    }else if(gameSquares[0]!=undefined&& gameSquares[3]==gameSquares[6] && gameSquares[6]==gameSquares[0])
+    {
+        gameOver()
+    }else if(gameSquares[1]!=undefined && gameSquares[4]==gameSquares[7] && gameSquares[7]==gameSquares[1])
+    {
+        gameOver()
+    }else if(gameSquares[2]!=undefined && gameSquares[5]==gameSquares[8] &&gameSquares[8]==gameSquares[2])
+    {
+        gameOver()
+    }else   if(gameSquares[0]!=undefined && gameSquares[1]==gameSquares[2] &&gameSquares[1]==gameSquares[0])
+    {
+        gameOver()
+    }else  if(gameSquares[3]!=undefined && gameSquares[4]==gameSquares[5] &&gameSquares[4]==gameSquares[3])
+    {
+        gameOver()
+    }else if(gameSquares[6]!=undefined && gameSquares[7]==gameSquares[8] && gameSquares[7]==gameSquares[6])
+    {
+        gameOver()
+    }
+}
+
+
+const getActivePlayer=()=>activePlayer;
+const switchTurns=()=>
+{
+    console.log(getActivePlayer().getName())
+   
+    round++
+    if(round>=5 && round<9)
+    {
+        checkWin()
+    }
+    else
+    if(round==9)
+    {
+       if(checkWin()==false)
+       {
+        result.innerHTML=`It's a draw this round`;
+       } 
+        
+    }
+    winner=activePlayer.getName();
+    activePlayer==player1 ? activePlayer=player2: activePlayer=player1;
+    console.log('round number is '+ round)
+
+}
+//game over 
+
+
+
+
+
+
+
+return{playRound,gameOver,getGameState,getActivePlayer,switchTurns}
 
 
 })();
+GameFlow.playRound()
+
+document.querySelectorAll('.square').forEach(item=>item.addEventListener('click',function()
+{
+    let game=GameFlow.getGameState();
+    let cellIndex=item.dataset.index;
+    if(game==true)
+    {
+        let activePlayer=GameFlow.getActivePlayer();
+        if(+activePlayer.getNumber()==1 && item.innerHTML=="")
+        {
+            item.innerHTML=activePlayer.getMarker();
+            markerArray(cellIndex)
+            GameFlow.switchTurns()
+            console.log(gameSquares)
+           
+        }
+        else  if(+activePlayer.getNumber()==2 && item.innerHTML=="")
+        {
+            item.innerHTML=activePlayer.getMarker();
+            markerArray(cellIndex)
+            GameFlow.switchTurns()
+            console.log(gameSquares)
+
+        }
+    }
+}))
+  
+
+    
+
+   
+
+
+
+    
+
+
