@@ -1,5 +1,10 @@
 let result=document.querySelector('.result');
 let htmlBoard=document.querySelector('.board');
+const start=document.querySelector('.start')
+let turn=document.querySelector('.turn');
+let firstScore=document.querySelector('#firstPScore')
+let secondScore=document.querySelector('#secondPScore')
+
 
 let gameSquares=[];
 
@@ -35,10 +40,15 @@ console.log(document.querySelectorAll('.square'))
 
 const Player=(playerName,playerMarker,number)=>
 {
+let newName=playerName;
     let getMarker=()=>playerMarker;
-    const getName=()=>playerName;
+  
+    const changeName=(name)=>{
+        newName=name;
+    }
+    const getName=()=>newName;
     const getNumber=()=>number;
-    return {getMarker,getName,getNumber};
+    return {getMarker,getName,getNumber,changeName};
 };
 
 let player1=Player('firstPlayer','X' ,'1');
@@ -61,8 +71,21 @@ const gameOver=()=>
 {
     game=false;
     winner=getActivePlayer().getName()
-    roundCount++
+    if(winner)
+    {
+        if(getActivePlayer().getNumber()=='1')
+    {
+       firstScore.textContent=+firstScore.textContent+1;
+    }
+    else  if(getActivePlayer().getNumber()=='2')
+    {
+       secondScore.textContent=+secondScore.textContent+1;
+    }
     result.innerHTML=`Player ${winner} won this round`;
+    }
+    
+    roundCount++
+ 
     gameSquares=[];
     document.querySelectorAll('.square').forEach(item=>item.innerHTML="")
     if(roundCount==3)
@@ -78,8 +101,8 @@ const playRound=()=>{
     game=true;
     round=0;
     activePlayer=player1;  
-   
-    
+    turn.textContent=`It is ${getActivePlayer().getName()}'s turn`;
+    result.textContent=''
     console.log(gameSquares)
    
 }
@@ -123,7 +146,7 @@ const getActivePlayer=()=>activePlayer;
 const switchTurns=()=>
 {
     console.log(getActivePlayer().getName())
-   
+  
     round++
     if(round>=5 && round<9)
     {
@@ -132,16 +155,24 @@ const switchTurns=()=>
     else
     if(round==9)
     {
-       if(checkWin()==false)
+       if(!checkWin())
        {
         result.innerHTML=`It's a draw this round`;
+        firstScore.textContent=+firstScore.textContent+1;
+        secondScore.textContent=+secondScore.textContent+1;
+        roundCount++
+        console.log(roundCount)
+        game=false;
+        gameSquares=[];
+        document.querySelectorAll('.square').forEach(item=>item.innerHTML="")
        } 
         
     }
     winner=activePlayer.getName();
     activePlayer==player1 ? activePlayer=player2: activePlayer=player1;
     console.log('round number is '+ round)
-
+   
+    turn.textContent=`It is ${getActivePlayer().getName()}'s turn`;
 }
 //game over 
 
@@ -155,7 +186,15 @@ return{playRound,gameOver,getGameState,getActivePlayer,switchTurns}
 
 
 })();
-GameFlow.playRound()
+
+start.addEventListener('click',function ()
+{
+        let firstPlayerInput=document.querySelector('#player1Input')
+        let secondPlayerInput=document.querySelector('#player2Input')
+        player1.changeName(firstPlayerInput.value);
+        player2.changeName(secondPlayerInput.value);
+    GameFlow.playRound()
+   
 
 document.querySelectorAll('.square').forEach(item=>item.addEventListener('click',function()
 {
@@ -183,7 +222,7 @@ document.querySelectorAll('.square').forEach(item=>item.addEventListener('click'
     }
 }))
   
-
+})
     
 
    

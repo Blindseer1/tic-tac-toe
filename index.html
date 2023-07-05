@@ -8,10 +8,21 @@
     <script src="script.js" defer></script>
 </head>
 <body>
+    <h1>
+        Tic-Tac-Toe
+    </h1>
     <div class="buttons">
-        <button class="start">
-            Start
-        </button>
+       
+       <div class="inputs">
+        <label for="player1Input">Player 1 Name</label>
+        <input type="text" id="player1Input">
+        <label for="player2Input">Player 2 Name</label>
+        <input type="text" id="player2Input">
+       </div>
+       <button class="start" type="submit">
+        Start
+    </button>
+        
     </div>
     <div class="container">
         <div class="board">
@@ -20,6 +31,31 @@
         <div class="result">
     
         </div>
+    </div>
+    <div class="thirdCont">
+        <div class="score">
+            <div class="scoreText">
+                Score
+            </div>
+            <div>
+                <div id="firstPScore">
+                    0
+                </div>
+                <div>
+                    :
+                </div>
+                <div id="secondPScore">
+                    0
+                </div>
+            </div>
+
+
+        </div>
+        <div class="turn">
+            
+        </div>
+        
+        
     </div>
    
 </body>

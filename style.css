@@ -1,3 +1,10 @@
+@font-face {
+    font-family: Pixelated;
+    src: url(font/ka1.ttf);
+}
+
+
+
 
 body
 {
@@ -6,11 +13,24 @@ body
     display: flex;
     align-items: center;
     background-color: #252020;
-   
+    font-family: Pixelated;
+   position: relative;
 }
 html{
     height: 100%;
     border: 0;
+}
+h1
+{
+    width: fit-content;
+    font-weight: normal;
+    color: white;
+ position: absolute;
+ top:5px;
+ right: 0;
+ left: 0;
+ margin-left: auto;
+ margin-right: auto;   
 }
 .container
 {
@@ -57,10 +77,16 @@ html{
 {
     height: 100%;
     width: 30%;
+    display: flex;
+    flex-direction: column;
+    gap:5px;
+    align-items: center;
+    justify-content: center;
 }
 .start
 {
     padding:0.6rem 1.5rem;
+   width: 40%;
     background-color: rgb(0, 0, 0);;
     color: white;
     border-style: solid;
@@ -68,9 +94,53 @@ html{
     border-width: 3px;
     border-radius: 14px;
     cursor: pointer;
+    font-family: Pixelated;
 }
 .start:hover
 {
     background-color: rgba(0, 0, 0, 0.336);
 
+}
+
+
+.thirdCont
+{
+    width: 30%;
+    height: 100%;
+    color: white;
+    font-size: 50px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+.score>div
+{
+    display: flex;
+    align-items: center;
+    gap:10px
+}
+.turn
+{
+    font-size: 10px;
+    font-family: inherit;
+}
+label
+{
+    color: white;
+    font-size: 15px;
+}
+input
+{
+    font-size: 10px;
+    border: 3px black solid;
+    font-family: Pixelated;
+    height: 1rem;
+}
+.inputs
+{
+    width: 65%;
+    display: grid;
+    grid-template-columns:1fr  ;
+    grid-template-rows: repeat(4,1fr);
+    row-gap: 4px;
 }
